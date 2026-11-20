@@ -2,6 +2,7 @@ package com.k2636474.smartstay.pricing;
 
 import com.k2636474.smartstay.model.K2636474Booking;
 import com.k2636474.smartstay.model.K2636474Invoice;
+import com.k2636474.smartstay.model.enums.K2636474BookingStatus;
 import com.k2636474.smartstay.model.room.K2636474RoomPackage;
 
 import java.time.LocalDateTime;
@@ -60,7 +61,9 @@ public class K2636474InvoiceCalculator {
         // Step 9: the advance only counts while the booking is confirmed (it is refunded on cancel).
         double advanceDeducted = booking.isActive() ? booking.getAdvancePaid() : 0;
         // Step 10: what is left to pay at the hotel; a negative value means a refund is due.
-        double finalPayable = grossTotal - advanceDeducted;
+        // A cancelled stay is never charged, so nothing is payable.
+        double finalPayable = booking.getStatus() == K2636474BookingStatus.CANCELLED
+                ? 0 : grossTotal - advanceDeducted;
 
         return new K2636474Invoice(invoiceId, booking, nights, baseCharge, extraGuests, extraGuestCharge,
                 discountRate, discountAmount, taxableAmount, taxRate, taxAmount, grossTotal,

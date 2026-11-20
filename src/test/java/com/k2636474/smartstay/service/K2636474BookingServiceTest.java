@@ -158,6 +158,26 @@ class K2636474BookingServiceTest {
     }
 
     @Test
+    @DisplayName("Rule 10: cancelling re-issues the invoice with no advance deducted and nothing payable")
+    void cancellationRegeneratesInvoice() {
+        K2636474Booking booking = bookStandard(5, 2);
+        K2636474Invoice original = booking.getInvoice();
+
+        bookingService.cancelBooking(booking.getBookingId(), guest);
+        K2636474Invoice cancelled = booking.getInvoice();
+
+        assertNotSame(original, cancelled);
+        assertEquals("INV0002", cancelled.getInvoiceId());
+        assertEquals(0, cancelled.getAdvanceDeducted());
+        assertEquals(0, cancelled.getFinalPayable());
+        String text = new K2636474InvoiceService(dataStore,
+                new K2636474InvoiceCalculator(new K2636474LongStayDiscountPolicy()), Clock.systemDefaultZone())
+                .formatInvoice(cancelled);
+        assertTrue(text.contains("Cancelled"));
+        assertTrue(text.contains("Booking cancelled - advance of LKR 10,000.00 refunded."));
+    }
+
+    @Test
     @DisplayName("Rule 9: cancel exactly 24 hours before check-in is rejected")
     void cancelAtExactly24HoursIsRejected() {
         K2636474Booking booking = bookStandard(5, 2);

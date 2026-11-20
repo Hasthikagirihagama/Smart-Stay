@@ -40,7 +40,7 @@ Seed data, with dates relative to the day you start the app:
 
 | Booking | Guest | Room | Shows |
 |---|---|---|---|
-| BK0001 | Nimal | R001 Standard | Starts tomorrow, so Modify/Cancel are blocked by the 24-hour rule |
+| BK0001 | Nimal | R001 Standard | Checks in today, so Modify/Cancel are blocked by the 24-hour rule |
 | BK0002 | Kamala | R004 Deluxe | 6 nights, 4 guests: long-stay discount and extra-guest charges (the worked example) |
 | BK0003 | Emma | R010 Family Suite | 6 guests: 2 extra guests |
 | BK0004 | Nimal | R007 Suite | Cancelled, advance refunded |

@@ -1369,6 +1369,7 @@ Visibility: `+` public, `#` protected, `-` private, `~` package-private. Static 
 | Vis | Field | Type | Notes |
 |---|---|---|---|
 | - private | `ALL` | `String` | *static* *final* |
+| - private | `STATUS_COLUMN_WIDTH` | `int` | *static* *final* |
 | - private | `context` | `K2636474UiContext` | *final* |
 | - private | `model` | `K2636474RoomTableModel` | *final* |
 | - private | `table` | `JTable` | *final* |

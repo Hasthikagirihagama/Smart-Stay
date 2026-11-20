@@ -147,8 +147,9 @@ public class K2636474BookingService {
     }
 
     /**
-     * Cancels a booking: it stops holding the room and the advance is marked refunded.
-     * The booking stays in the store and index so it still shows in history.
+     * Cancels a booking: it stops holding the room, the advance is marked refunded and
+     * a new invoice is issued showing nothing payable. The booking stays in the store and
+     * index so it still shows in history.
      *
      * @param bookingId booking to cancel
      * @param actor     user cancelling (guests may only cancel their own)
@@ -161,6 +162,8 @@ public class K2636474BookingService {
         K2636474Booking booking = findById(bookingId);
         requireChangeAllowed(booking, actor);
         booking.cancel();
+        // Re-issue the invoice so it shows the cancellation: no advance deducted, nothing payable.
+        invoiceService.generateInvoice(booking);
         return booking;
     }
 

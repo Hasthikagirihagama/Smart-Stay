@@ -63,8 +63,9 @@ public class K2636474DataSeeder {
         seedRooms();
 
         // Seeded bookings use recordExistingBooking, which skips only the "2 days in advance"
-        // rule: they represent reservations made earlier, e.g. the one starting tomorrow.
-        bookingService.recordExistingBooking(nimal, "R001", today.plusDays(1), today.plusDays(3), 2);
+        // rule: they represent reservations made earlier. BK0001 checks in today so the
+        // 24-hour modify/cancel block is visible whatever time the app is run.
+        bookingService.recordExistingBooking(nimal, "R001", today, today.plusDays(2), 2);
         bookingService.recordExistingBooking(kamala, "R004", today.plusDays(7), today.plusDays(13), 4);
         bookingService.recordExistingBooking(emma, "R010", today.plusDays(4), today.plusDays(7), 6);
         K2636474Booking cancelled = bookingService.recordExistingBooking(nimal, "R007",

@@ -26,6 +26,7 @@ import java.awt.event.MouseEvent;
 public class K2636474RoomsPage extends K2636474Page {
 
     private static final String ALL = "All";
+    private static final int STATUS_COLUMN_WIDTH = 170;
 
     private final K2636474UiContext context;
     private final K2636474RoomTableModel model = new K2636474RoomTableModel();
@@ -53,6 +54,8 @@ public class K2636474RoomsPage extends K2636474Page {
                 .setCellRenderer(K2636474UiTheme.moneyRenderer());
         table.getColumnModel().getColumn(K2636474RoomTableModel.STATUS_COLUMN)
                 .setCellRenderer(new K2636474StatusPillRenderer());
+        // Wide enough for the longest pill, "Under Maintenance", so it is never clipped.
+        table.getColumnModel().getColumn(K2636474RoomTableModel.STATUS_COLUMN).setMinWidth(STATUS_COLUMN_WIDTH);
         table.getSelectionModel().addListSelectionListener(event -> updateButtons());
         table.addMouseListener(new MouseAdapter() {
             @Override
