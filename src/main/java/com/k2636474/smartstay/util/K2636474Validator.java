@@ -136,8 +136,7 @@ public final class K2636474Validator {
      */
     public static String requirePassword(String fieldName, String value) {
         if (value == null || value.length() < MIN_PASSWORD_LENGTH) {
-            throw new K2636474ValidationException(fieldName,
-                    "Password must be at least " + MIN_PASSWORD_LENGTH + " characters.");
+            throw new K2636474ValidationException(fieldName, "Use at least " + MIN_PASSWORD_LENGTH + " characters.");
         }
         return value;
     }
