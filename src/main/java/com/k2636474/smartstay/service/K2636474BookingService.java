@@ -28,6 +28,8 @@ public class K2636474BookingService {
 
     /** ID given to unsaved draft bookings that are only priced for the live preview. */
     public static final String DRAFT_BOOKING_ID = "DRAFT";
+    /** Length of the "this week" window for upcoming check-ins, in days. */
+    public static final int UPCOMING_DAYS = 7;
 
     private final K2636474DataStore dataStore;
     private final K2636474RoomService roomService;
@@ -302,8 +304,27 @@ public class K2636474BookingService {
         String needle = query == null ? "" : query.trim().toLowerCase(Locale.ROOT);
         return dataStore.getBookingsSortedByCheckIn().stream()
                 .filter(booking -> isVisibleTo(booking, viewer))
-                .filter(booking -> booking.getBookingId().toLowerCase(Locale.ROOT).contains(needle)
-                        || booking.getGuest().getFullName().toLowerCase(Locale.ROOT).contains(needle))
+                .filter(booking -> matchesQuery(booking, needle))
+                .toList();
+    }
+
+    /**
+     * Searches by booking ID or guest name and, optionally, an exact check-in date.
+     * With a date, the TreeMap index gives that day's bookings in O(log n) first,
+     * and only those are matched against the text.
+     *
+     * @param viewer      the logged-in user (guests only see their own bookings)
+     * @param query       booking ID or part of a guest name; blank matches all
+     * @param checkInDate check-in date to filter by, or null for any date
+     * @return matching visible bookings sorted by check-in
+     */
+    public List<K2636474Booking> searchReservations(K2636474User viewer, String query, LocalDate checkInDate) {
+        if (checkInDate == null) {
+            return searchReservations(viewer, query);
+        }
+        String needle = query == null ? "" : query.trim().toLowerCase(Locale.ROOT);
+        return getByCheckInDate(viewer, checkInDate).stream()
+                .filter(booking -> matchesQuery(booking, needle))
                 .toList();
     }
 
@@ -372,13 +393,21 @@ public class K2636474BookingService {
     }
 
     /**
-     * Counts confirmed bookings checking in within the next 7 days (today included).
+     * Returns confirmed bookings checking in within the next 7 days (today included),
+     * using a TreeMap range query.
      *
-     * @return check-ins this week
+     * @return upcoming check-ins in check-in order
      */
-    public long countCheckInsThisWeek() {
+    public List<K2636474Booking> getUpcomingCheckIns() {
         LocalDate today = LocalDate.now(clock);
-        return getBookingsInRange(today, today.plusDays(6)).stream().filter(K2636474Booking::isActive).count();
+        return getBookingsInRange(today, today.plusDays(UPCOMING_DAYS - 1L)).stream()
+                .filter(K2636474Booking::isActive)
+                .toList();
+    }
+
+    private static boolean matchesQuery(K2636474Booking booking, String lowerCaseNeedle) {
+        return booking.getBookingId().toLowerCase(Locale.ROOT).contains(lowerCaseNeedle)
+                || booking.getGuest().getFullName().toLowerCase(Locale.ROOT).contains(lowerCaseNeedle);
     }
 
     private static boolean isVisibleTo(K2636474Booking booking, K2636474User viewer) {
