@@ -1,0 +1,36 @@
+================================================================
+                        SMARTSTAY HOTELS
+                        Booking Invoice
+================================================================
+Invoice no.      INV0002
+Booking no.      BK0002
+Issued           2026-11-20 17:16
+Status           Confirmed
+----------------------------------------------------------------
+GUEST
+  Name           Kamala Silva
+  NIC            199512345678
+  Contact        +94712345678
+  Email          kamala@example.com
+ROOM
+  Room           R004 (Deluxe, Double bed)
+  Daily rate     LKR 9,000.00
+  Breakfast      Included
+STAY
+  Check-in       2026-11-27 from 14:00
+  Check-out      2026-12-03
+  Nights         6
+  Guests         4 (2 included, 2 extra)
+----------------------------------------------------------------
+Room charge (6 x 9,000.00)                         LKR 54,000.00
+Extra guests (2 x 1,500.00 x 6)                    LKR 18,000.00
+Discount (12% long stay)                           -LKR 6,480.00
+Taxable amount                                     LKR 65,520.00
+Tax (12%)                                           LKR 7,862.40
+----------------------------------------------------------------
+Gross total                                        LKR 73,382.40
+Advance deducted                                  -LKR 10,000.00
+================================================================
+FINAL PAYABLE                                      LKR 63,382.40
+================================================================
+Amounts in Sri Lankan Rupees. Thank you for staying with SmartStay.

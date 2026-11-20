@@ -43,7 +43,8 @@ public final class K2636474Format {
     public static String amount(double amount) {
         // DecimalFormat is not thread-safe, so a fresh instance is created per call.
         DecimalFormat format = new DecimalFormat(MONEY_PATTERN, DecimalFormatSymbols.getInstance(Locale.US));
-        return format.format(amount);
+        // Negative zero (e.g. "−advance" when no advance is deducted) would otherwise print as "-0.00".
+        return format.format(amount == 0 ? 0 : amount);
     }
 
     /**

@@ -19,13 +19,35 @@ and see every reservation. All data is held in memory and demo data is loaded at
 java -jar target/smartstay.jar
 ```
 
-`mvn package` compiles the code, runs the 63 JUnit tests and builds `target/smartstay.jar` with
+`mvn package` compiles the code, runs the 64 JUnit tests and builds `target/smartstay.jar` with
 FlatLaf bundled inside.
 
 From an IDE, open the folder as a Maven project and run
 `com.k2636474.smartstay.app.K2636474SmartStayApp`.
 
 Run only the tests with `./mvnw test`.
+
+## Automated UI test run
+
+`src/test/java/com/k2636474/smartstay/uitest` holds a runner that performs the 47 coursework
+test cases through the real Swing UI. It uses the real frame, dialogs and services, fills in
+fields and clicks the real buttons, then screenshots each result:
+
+```bash
+./mvnw -q test-compile exec:java -Dexec.classpathScope=test \
+    -Dexec.mainClass=com.k2636474.smartstay.uitest.K2636474UiTestRunner
+```
+
+The run takes about two minutes. It opens the app window on top and moves the mouse for the
+tooltip tests, so don't use the mouse or keyboard while it runs. It writes:
+
+- `test-evidence/screenshots/TC01.png … TC47.png`. Extra steps use a suffix: `a` for the
+  step before the result (e.g. a confirmation) and `b` for a follow-up (e.g. the invoice).
+- `test-evidence/results.csv` and `test-evidence/results.md`, where each actual value is
+  read back from the screen and checked against the expected value.
+- `test-evidence/TC36_invoice.txt`, the invoice saved through the Save dialog.
+
+The runner is test code only. It is not in `smartstay.jar` and doesn't change how the app behaves.
 
 ## Demo logins
 

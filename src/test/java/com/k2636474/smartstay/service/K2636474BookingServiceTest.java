@@ -175,6 +175,7 @@ class K2636474BookingServiceTest {
                 .formatInvoice(cancelled);
         assertTrue(text.contains("Cancelled"));
         assertTrue(text.contains("Booking cancelled - advance of LKR 10,000.00 refunded."));
+        assertFalse(text.contains("-0.00"), "a zero advance must not print as negative zero");
     }
 
     @Test
